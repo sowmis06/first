@@ -80,7 +80,7 @@ export default function HomeScreen() {
           backgroundColor: "#1E3A8A",
         }}
       />
-      <StatusBar barStyle="light-content" backgroundColor="#1E3A8A" />
+      <StatusBar barStyle="light-content" backgroundColor="#1e8a74" />
 
       <Header
         searchText={searchText}
