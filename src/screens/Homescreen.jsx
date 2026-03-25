@@ -77,7 +77,7 @@ export default function HomeScreen() {
       <View
         style={{
           height: Math.max(insets.top, StatusBar.currentHeight || 0),
-          backgroundColor: "#1E3A8A",
+          backgroundColor: "#8a301eff",
         }}
       />
       <StatusBar barStyle="light-content" backgroundColor="#1e8a74" />
