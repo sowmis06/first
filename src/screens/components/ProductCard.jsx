@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
-import { HeartPlus, CirclePlus } from "lucide-react-native";
-
-const { width } = Dimensions.get("window");
-const CARD_W = (width - 48) / 2;
+import { HeartPlus } from "lucide-react-native";
+import { useAppContext } from "../constants/AppContext";
+import { useWindowDimensions } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ProductCard({ item }) {
-  const [imgError, setImgError] = useState(false);
-  const [wishlist, setWishlist] = useState(false);
+  const [imgError, setImgError] = React.useState(false);
+  const { addToCart, isInCart, toggleWishlist, isWishlisted } = useAppContext();
+  const { width } = useWindowDimensions();
+  const CARD_W = (width - 48) / 2;
+
+  const inCart     = isInCart(item.id);
+  const wishlisted = isWishlisted(item.id);
 
   const formatPrice = (price) => {
     if (typeof price === "number") return `₹${price}`;
@@ -21,19 +26,13 @@ export default function ProductCard({ item }) {
       className="bg-white rounded-2xl mb-3 shadow"
     >
       {/* Image */}
-      <View
-        style={{ height: CARD_W * 1.15 }}
-        className="w-full bg-gray-100 relative"
-      >
+      <View style={{ height: CARD_W * 1.15 }} className="w-full bg-gray-100 relative">
         {!imgError ? (
           <Image
             source={{ uri: item.image }}
             className="w-full h-full"
             resizeMode="cover"
-            onError={() => {
-              // Defer state update to next tick to avoid "update before mount" warnings
-              setTimeout(() => setImgError(true), 0);
-            }}
+            onError={() => setTimeout(() => setImgError(true), 0)}
           />
         ) : (
           <View className="w-full h-full items-center justify-center bg-gray-200">
@@ -41,14 +40,14 @@ export default function ProductCard({ item }) {
           </View>
         )}
 
-        {/* Wishlist */}
+        {/* Wishlist Button */}
         <TouchableOpacity
-          onPress={() => setWishlist(!wishlist)}
+          onPress={() => toggleWishlist(item)}
           className="absolute top-2 right-2 bg-blue-100 rounded-full w-8 h-8 items-center justify-center"
         >
           <HeartPlus
-            color={wishlist ? "red" : "#060606ff"}
-            fill={wishlist ? "red" : "none"}
+            color={wishlisted ? "red" : "#060606ff"}
+            fill={wishlisted ? "red" : "none"}
             size={20}
           />
         </TouchableOpacity>
@@ -69,10 +68,7 @@ export default function ProductCard({ item }) {
           <Text className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide mb-1">
             {item.category}
           </Text>
-
-          <Text
-            className="text-[13px] h-12 font-bold text-gray-900 leading-5"
-          >
+          <Text className="text-[13px] h-12 font-bold text-gray-900 leading-5">
             {item.name}
           </Text>
         </View>
@@ -83,9 +79,22 @@ export default function ProductCard({ item }) {
             {formatPrice(item.price)}
           </Text>
 
-          <TouchableOpacity className="w-7 h-7  items-center justify-center">
-            <CirclePlus color="black" size={30} />
-          </TouchableOpacity>
+          {/* Add to Cart Button */}
+          <TouchableOpacity
+  onPress={() => addToCart(item)}
+  className={`flex-row items-center gap-1 px-3 py-1.5 rounded-lg ${
+    inCart ? "bg-green-600" : "bg-blue-900"
+  }`}
+>
+  <Ionicons
+    name={inCart ? "checkmark-circle" : "cart-outline"}
+    size={14}
+    color="white"
+  />
+  <Text className="text-white text-[11px] font-bold">
+    {inCart ? "Added" : "Add"}
+  </Text>
+</TouchableOpacity>
         </View>
       </View>
     </TouchableOpacity>

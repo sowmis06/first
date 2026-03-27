@@ -14,12 +14,13 @@ import CategoryFilter from "./components/CategoryFilter";
 import ProductCard from "./components/ProductCard";
 import { products } from "./constants/products";
 import { categories } from "./constants/categories";
+import { useAppContext } from "./constants/AppContext.js";
 
 export default function HomeScreen() {
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOrder, setSortOrder] = useState("Popular");
-  const [cartCount] = useState(0);
+  const { cartCount } = useAppContext();
   const insets = useSafeAreaInsets();
 
   const filteredProducts = React.useMemo(() => {
@@ -74,13 +75,8 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.root}>
-      <View
-        style={{
-          height: Math.max(insets.top, StatusBar.currentHeight || 0),
-          backgroundColor: "#8a301eff",
-        }}
-      />
-      <StatusBar barStyle="light-content" backgroundColor="#1e8a74" />
+     
+      <StatusBar barStyle="light-content" className="bg-blue-900" />
 
       <Header
         searchText={searchText}

@@ -1,8 +1,8 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { ShoppingCart } from "lucide-react-native";
-export default function Header({ searchText, onSearchChange, cartCount }) {
+export default function Header({ searchText, onSearchChange, cartCount, onCartPress }) {
   return (
-    <View className="bg-blue-900 px-4 pt-1 pb-8 rounded-b-3xl">
+    <View className="bg-blue-900 px-4 pt-1 pb-8 rounded-b-4xl">
       {/* Top Row */}
       <View className="flex-row items-center justify-between mb-2">
         <Text className="text-white text-2xl font-bold">
